@@ -17,6 +17,7 @@ In the managed machine:
 ## Instructions
 
 * Configure it by modifying the `vars.yml` file
+* Create the "files/ssh_keys/" directory and place your private ssh key inside.
 * How to run it: `$ ansible-playbook -i inventory/hosts siteBackup.yml`
 
 You can filter by tags:
