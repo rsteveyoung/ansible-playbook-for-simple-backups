@@ -1,5 +1,6 @@
 # Ignore private ssh_keys
-files/ssh_keys/*
+/files/ssh_keys/*
+!/files
 
 # Ignore OS generated files
 .DS_STORE

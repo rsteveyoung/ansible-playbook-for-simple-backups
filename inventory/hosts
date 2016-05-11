@@ -1,0 +1,2 @@
+[site]
+{{host_domain}} ansible_ssh_user={{ssh_user}} ansible_ssh_private_key_file={{private_ssh_key}}

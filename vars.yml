@@ -1,0 +1,24 @@
+# REMOTE SERVER PARAMS
+host_domain:
+nice_hostname:
+ssh_user:
+private_ssh_key:
+remote_bkup_dir:
+remote_root_dir:
+local_bkup_dir:
+
+# MYSQL DATABASE PARAMS
+db_host:
+db_user:
+db_pass:
+
+databases:
+
+# THE FOLDERS TO BE ZIPPED
+folders:
+
+# EMAIL NOTIFICATION DATA
+admin_email:
+gmail_username:
+gmail_password:
+notification_subject:   

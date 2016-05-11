@@ -1,0 +1,60 @@
+---
+- name: Single Site Backup
+  hosts: site
+  sudo: False
+  vars_files:
+    - vars.yml
+
+  tasks:
+
+    - name: Create Backups folder
+      file: path={{ remote_bkup_dir }} state=directory
+      tags:
+        - folders
+        - databases
+
+    - name: Dump databases
+      mysql_db: login_user={{ db_user }} login_host={{ db_host }} login_password={{ db_pass }} name={{ item }} state=dump target={{ remote_bkup_dir }}{{ item }}_db.sql.gz
+      with_items: databases
+      tags:
+        - databases
+
+    - name: Compress sites folders
+      shell: tar -zcvf {{ remote_bkup_dir }}{{ item }}.tar {{ remote_root_dir }}{{ item }}
+      with_items: folders
+      tags:
+        - folders
+
+    - name: Fetch databases backups
+      fetch: src={{ remote_bkup_dir }}{{ item }}_db.sql.gz dest={{ local_bkup_dir }} flat=yes
+      with_items: databases
+      tags:
+        - databases
+
+    - name: Fetch folders backups
+      fetch: src={{ remote_bkup_dir }}{{ item }}.tar dest={{ local_bkup_dir }} flat=yes
+      with_items: folders
+      tags:
+        - folders
+
+    - name: Delete temp backup folder from server
+      file: path={{ remote_bkup_dir }} state=absent
+      tags:
+        - folders
+        - databases
+
+    - name: Send email notification
+      local_action: mail
+                    host='smtp.gmail.com'
+                    port=587
+                    username='{{gmail_username}}'
+                    password='{{gmail_password}}'
+                    to='{{admin_email}}'
+                    subject='{{notification_subject}}'
+                    body='Website {{ nice_hostname }} has been successfully backed up.'
+
+      ignore_errors: true
+      tags:
+        - folders
+        - databases
+        - notification
